@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import config from "./config.json";
+
 import CounterDAPP from "./abis/counterDAPP.json";
 import "./index.css";
 
@@ -12,6 +13,7 @@ function App() {
   const [provider, setProvider] = useState(null);
   const [account, setAccount] = useState(null);
   
+  const [counterDAPP, setCounterDAPP] = useState(null);
 
   const handleIncrement = () => {
     setCounter((prevCounter) => prevCounter + 1);
@@ -36,6 +38,10 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(provider);
     const network = await provider.getNetwork();
+    const counterDAPP = new ethers.Contract(config[network.chainId].CounterDAPP.address, CounterDAPP, provider)
+    setCounterDAPP(counterDAPP)
+    console.log(await counterDAPP.counter())
+    
     window.ethereum.on("accountsChanged", async () => {
       loadAccount();
     });
@@ -105,7 +111,7 @@ function App() {
         </table>
       </div>
       <div className="centered">
-        <div className="beautiful-counter">Counter: {account}</div>
+        <div className="beautiful-counter">Counter: {counter}</div>
       </div>
     </div>
   );
