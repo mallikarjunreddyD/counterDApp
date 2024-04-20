@@ -14,24 +14,39 @@ function App() {
   const [account, setAccount] = useState(null);
   
   const [counterDAPP, setCounterDAPP] = useState(null);
-
-  const handleIncrement = () => {
-    setCounter((prevCounter) => prevCounter + 1);
+  
+  const handleIncrement = async() => {
+    const signer = await provider.getSigner()
+    let transaction = await counterDAPP.connect(signer).incrementCounter()
+    let receipt = await transaction.wait()
+    setCounter(receipt.events[0].args[0].toNumber());
   };
 
-  const handleDecrement = () => {
-    setCounter((prevCounter) => prevCounter - 1);
+  const handleDecrement = async() => {
+    const signer = await provider.getSigner()
+    let transaction = await counterDAPP.connect(signer).decrementCounter()
+    let receipt = await transaction.wait()
+    setCounter(receipt.events[0].args[0].toNumber());
   };
 
-  const handleIncrementByValue = () => {
-    setCounter((prevCounter) => prevCounter + parseInt(incrementValue));
+  const handleIncrementByValue = async() => {
+    const signer = await provider.getSigner()
+    let transaction = await counterDAPP.connect(signer).incrementBy(parseInt(incrementValue))
+    let receipt = await transaction.wait()
+    setCounter(receipt.events[0].args[0].toNumber());
   };
 
-  const handleDecrementByValue = () => {
-    setCounter((prevCounter) => prevCounter - parseInt(decrementValue));
+  const handleDecrementByValue = async() => {
+    const signer = await provider.getSigner()
+    let transaction = await counterDAPP.connect(signer).decrementBy(parseInt(decrementValue))
+    let receipt = await transaction.wait()
+    setCounter(receipt.events[0].args[0].toNumber());
   };
-  const reset = () => {
-    setCounter(0);
+  const reset = async() => {
+    const signer = await provider.getSigner()
+    let transaction = await counterDAPP.connect(signer).reset()
+    let receipt = await transaction.wait()
+    setCounter(receipt.events[0].args[0].toNumber());
   };
 
   async function loadBlockchainData() {
@@ -40,7 +55,8 @@ function App() {
     const network = await provider.getNetwork();
     const counterDAPP = new ethers.Contract(config[network.chainId].CounterDAPP.address, CounterDAPP, provider)
     setCounterDAPP(counterDAPP)
-    console.log(await counterDAPP.counter())
+    const counter = await counterDAPP.counter()
+    setCounter(counter.toNumber())
     
     window.ethereum.on("accountsChanged", async () => {
       loadAccount();

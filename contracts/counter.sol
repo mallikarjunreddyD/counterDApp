@@ -35,4 +35,9 @@ contract counterDAPP {
         counter = counter - value;
         emit counterUpdate(counter);
     }
+
+    function reset() public {
+        counter = 0;
+        emit counterUpdate(counter);
+    }
 }
