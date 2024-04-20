@@ -1,0 +1,14 @@
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh; /* This ensures it takes up the full height of the viewport */
+  }
+  
+  .beautiful-counter {
+    font-size: 24px;
+    color: #333; /* Adjust color as needed */
+    border: 2px solid #333; /* Border around the counter */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding inside the container */
+  }
